@@ -77,7 +77,7 @@ var transporter = nodemailer.createTransport({
  ///////////////////////
 //// Hey Rbk here i'm setting new Users //
  app.post("/users", (req, res) => {
-  var array = [req.body.username,req.body.email, req.body.password,req.body.Cohort,req.body.Role];
+  var array = [req.body.username,req.body.email, hash(req.body.password),req.body.Cohort,req.body.Role];
   db.adduser(array, (err, data) => {
     err ? console.log(err) : res.send(data);
   });
@@ -136,14 +136,16 @@ app.post("/Cours", (req, res) => {
 });
 /////////////auaathentification////////////
   app.post("/login", (req, res) => {
-    var array=[req.body.username,req.body.password];
-    db.logusers(array ,(err, data)=>{
-      if(data){
-        res.send(data)
-      } else {
-         res.send("err")
-      }
-    })
+    var array=[req.body.username,hash(req.body.password)];
+    db.getallusers((err, data) => {
+      if (err) throw err;
+      myData = data.map((element) => Object.values(element)).flat();
+    if (!myData.includes(req.body.username)) {
+      res.send(false);
+      return;
+    }
+    db.logusers
+    });
       
 });
 

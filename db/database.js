@@ -64,9 +64,9 @@ const addCours = (arr, callback) => {
     callback(null, data);
   });
 };
-const logusers = (arr, callback) => {
-  let sql = `select * from users where username = ? and password = ?;`;
-  connection.query(sql,arr, (err, data) => {
+const logusers = (username, callback) => {
+  let sql = `select password from companies where name = ?;`;
+  connection.query(sql, (err, data) => {
     if (err) throw callback(err, null);
     callback(null, data);
   });
