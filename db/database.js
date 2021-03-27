@@ -12,12 +12,20 @@ connection.connect(function (err) {
 /////////////////////////////////////////////////////////////////////////Authentification////////////
 const adduser = (arr, callback) => {
   let sql =
-    "insert into users (username,email,password,Role) values (?,?,?,?)";
+    "insert into users (username,email,password,Cohort,Role) values (?,?,?,?,?)";
   connection.query(sql, arr, (err, data) => {
     if (err) throw callback(err, null);
     callback(null, data);
   });
 };
+const getallusers = (callback) => {
+  let sql = `select * from users;`;
+  connection.query(sql, (err, data) => {
+    if (err) throw callback(err, null);
+    callback(null, data);
+  });
+};
+
 const getstudents = (callback) => {
   let sql = `select * from users where Role="student";`;
   connection.query(sql, (err, data) => {
@@ -47,23 +55,23 @@ const assignCohort = (arr, callback) => {
     callback(null, data);
   });
 };
-let verificationRequestCompany = (arr, callback) => {
-  var sql = "UPDATE companies SET verRequest = ?  WHERE name= ?;";
-  connection.query(sql, arr, (err, data) => {
-    if (err) throw callback(err);
-    callback(null, data);
-  });
-};
+
 const addCours = (arr, callback) => {
   let sql =
-    "insert into Courses ( content ,nameCours,videoUrl,imageUrl ,Cohort )  values (?,?,?,?,?)";
+    "insert into Courses ( content ,nameCours,videoUrl,imageUrl ,Cohort )  values (?,?,?,?,?);";
   connection.query(sql, arr, (err, data) => {
     if (err) throw callback(err, null);
     callback(null, data);
   });
 };
-
+const logusers = (arr, callback) => {
+  let sql = `select * from users where username = ? and password = ?;`;
+  connection.query(sql,arr, (err, data) => {
+    if (err) throw callback(err, null);
+    callback(null, data);
+  });
+};
 module.exports = {
   adduser,getstudents,getInstructors,getCoursCreator,
-  assignCohort,addCours
+  assignCohort,addCours,getallusers,logusers
 };
